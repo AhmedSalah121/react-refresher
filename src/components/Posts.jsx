@@ -1,11 +1,25 @@
 import NewPost from "./NewPost";
 import classes from './Posts.module.css';
 import Modal from "./Modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Post from "./Post";
 
 function Posts(props) {
     const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        async function fetchPosts() {
+            const response = await fetch('http://localhost:8080/posts', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            const data = await response.json();
+            setPosts(data.posts);
+        }
+        fetchPosts();
+    }, []);
 
     function addPostHandler(postData) {
         fetch('http://localhost:8080/posts', {
@@ -18,8 +32,6 @@ function Posts(props) {
         // arrow function cuz the current state depends on the previous state 
         setPosts((prevPosts) => [postData, ...prevPosts]);
     }
-
-    
 
     return (
         <>
