@@ -7,6 +7,14 @@
     animation: animate-in 1s ease-out forwards;
 }
 
+.post:hover {
+    background-color: #a68eea;
+}
+
+.post a {
+    text-decoration: none;
+}
+
 .author {
     font-size: 0.8rem;
     font-weight: bold;
