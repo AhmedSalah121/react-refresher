@@ -1,10 +1,11 @@
 import classes from "./NewPost.module.css";
 import Modal from "../components/Modal";
 import { Link, Form, redirect } from "react-router-dom";
+import type { ActionFunctionArgs } from "react-router-dom";
 
-export async function action(data) {
-  const formData = await data.request.formData();
-  const postData = Object.fromEntries(formData); // {body: '..', author: '..'}
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData();
+  const postData = Object.fromEntries(formData) as { body: string; author: string };
   await fetch("http://localhost:8080/posts", {
     method: "POST",
     headers: {
@@ -30,9 +31,7 @@ function NewPost() {
         </p>
         <p className={classes.actions}>
           <button type="submit">Post</button>
-          <Link type="button" to={-1}>
-            Cancel
-          </Link>
+          <Link to={-1 as any}>Cancel</Link>
         </p>
       </Form>
     </Modal>

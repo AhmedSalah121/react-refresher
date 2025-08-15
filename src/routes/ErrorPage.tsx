@@ -1,17 +1,16 @@
-import { MdOpacity } from "react-icons/md";
-import classes from "./ErrorPage.module.css";
 import { Link, isRouteErrorResponse, useRouteError } from "react-router-dom";
+import classes from "./ErrorPage.module.css";
 
 function ErrorPage() {
   const error = useRouteError();
 
   let title = "Something went wrong fetching data!";
   let message = "Something went wrong, backend unreachable.";
-  let statusInfo = null;
+  let statusInfo: string | null = null;
 
   if (isRouteErrorResponse(error)) {
     statusInfo = `${error.status} ${error.statusText}`;
-    if (error.data) message = error.data;
+    if (error.data) message = (error.data as string) || message;
   } else if (error instanceof Error) {
     message = error.message;
   }

@@ -1,11 +1,17 @@
 import { useLoaderData, Link } from "react-router-dom";
-
+import type { LoaderFunctionArgs } from "react-router-dom";
 import Modal from "../components/Modal";
 import classes from "./PostDetails.module.css";
+import type { PostModel } from "./Posts";
 
-export async function loader({ params }) {
+export async function loader({ params }: LoaderFunctionArgs): Promise<PostModel> {
+  const postId = params.id;
+  if (!postId) {
+    throw new Response("Post ID is required", { status: 400 });
+  }
+  
   try {
-    const response = await fetch(`http://localhost:8080/posts/${params.id}`);
+    const response = await fetch(`http://localhost:8080/posts/${postId}`);
     if (!response.ok) {
       throw new Response("Failed to fetch post", { status: response.status });
     }
@@ -13,7 +19,7 @@ export async function loader({ params }) {
     if (!data || !data.post) {
       throw new Response("Post not found", { status: 404 });
     }
-    return data.post;
+    return data.post as PostModel;
   } catch (err) {
     if (err instanceof Response) throw err;
     throw new Response("Network error while loading post", { status: 500 });
@@ -21,7 +27,7 @@ export async function loader({ params }) {
 }
 
 function PostDetails() {
-  const post = useLoaderData();
+  const post = useLoaderData() as PostModel | undefined;
 
   if (!post) {
     return (
