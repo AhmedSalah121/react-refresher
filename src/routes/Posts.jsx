@@ -2,14 +2,20 @@ import { Outlet } from "react-router-dom";
 import PostsList from "../components/PostsList";
 
 export async function loader() {
-  const response = await fetch("http://localhost:8080/posts");
-  const data = await response.json();
-  if (!response || !data) {
-    throw new Response(JSON.stringify({ message: "Failed to fetch posts." }), {
-      status: 404,
-    });
+  try {
+    const response = await fetch("http://localhost:8080/posts");
+    if (!response.ok) {
+      throw new Response("Failed to fetch posts", { status: response.status });
+    }
+    const data = await response.json();
+    if (!data || !Array.isArray(data.posts)) {
+      throw new Response("Malformed posts response", { status: 500 });
+    }
+    return data.posts;
+  } catch (err) {
+    if (err instanceof Response) throw err;
+    throw new Response("Network error while loading posts", { status: 500 });
   }
-  return data.posts;
 }
 
 function Posts() {

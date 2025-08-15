@@ -6,19 +6,33 @@ import PostDetails, { loader as postDetailsLoader } from "./routes/PostDetails";
 import "./index.css";
 import NewPost, { action as newPostAction } from "./routes/NewPost";
 import Layout from "./routes/Layout";
+import ErrorPage from "./routes/ErrorPage";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
         element: <Posts />,
         loader: postsLoader,
+        errorElement: <ErrorPage />,
         children: [
-          { path: "/create-post", element: <NewPost />, action: newPostAction },
-          { path: "/:id", element: <PostDetails />, loader: postDetailsLoader },
+          {
+            path: "/create-post",
+            element: <NewPost />,
+            action: newPostAction,
+            errorElement: <ErrorPage />,
+          },
+          {
+            path: "/:id",
+            element: <PostDetails />,
+            loader: postDetailsLoader,
+            errorElement: <ErrorPage />,
+          },
         ],
       },
     ],
@@ -27,6 +41,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
   </React.StrictMode>,
 );

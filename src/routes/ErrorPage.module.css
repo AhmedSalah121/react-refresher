@@ -1,0 +1,29 @@
+.retryButton {
+    margin-right: 1rem;
+    background-color: #555;
+    color: #fff;
+    width: 100px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font: inherit;
+    opacity: 0.9;
+    transition: opacity 0.25s ease, transform 0.15s ease, background-color 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.retryButton:hover,
+.retryButton:focus-visible {
+    opacity: 1;
+    background-color: gray;
+    transform: translateY(-2px);
+}
+
+.retryButton:active {
+    opacity: 0.7;
+    background-color: gray;
+    transform: translateY(0);
+}

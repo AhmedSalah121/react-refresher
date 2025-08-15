@@ -7,8 +7,10 @@ function MainHeader() {
     <header className={classes.header}>
       <h1 className={classes.logo}>
         <MdMessage />
-        What's on your mind? 
-        <span role="img" aria-label="thinking">🤔</span>
+        What's on your mind?
+        <span role="img" aria-label="thinking">
+          🤔
+        </span>
       </h1>
       <p>
         <Link className={classes.button} to="/create-post">

@@ -1,12 +1,23 @@
-import { useLoaderData, Link } from 'react-router-dom';
+import { useLoaderData, Link } from "react-router-dom";
 
-import Modal from '../components/Modal';
-import classes from './PostDetails.module.css';
+import Modal from "../components/Modal";
+import classes from "./PostDetails.module.css";
 
 export async function loader({ params }) {
-  const response = await fetch(`http://localhost:8080/posts/${params.id}`);
-  const data = await response.json();
-  return data.post;
+  try {
+    const response = await fetch(`http://localhost:8080/posts/${params.id}`);
+    if (!response.ok) {
+      throw new Response("Failed to fetch post", { status: response.status });
+    }
+    const data = await response.json();
+    if (!data || !data.post) {
+      throw new Response("Post not found", { status: 404 });
+    }
+    return data.post;
+  } catch (err) {
+    if (err instanceof Response) throw err;
+    throw new Response("Network error while loading post", { status: 500 });
+  }
 }
 
 function PostDetails() {
